@@ -1,5 +1,24 @@
 import { BasketIcon } from '@sanity/icons'
 
+interface Product {
+  title: string;
+  image: string;
+  quantity: number;
+  totalPrice: number;
+  size: string;
+}
+
+interface Order {
+  customerName: string;
+  customerEmail: string;
+  phoneNumber: string;
+  address: string;
+  orderNumber?: string;
+  orderDate?: string;
+  status: 'pending' | 'paid' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+  products: Product[];
+}
+
 export default {
   name: 'order',
   title: 'Order',
@@ -10,13 +29,40 @@ export default {
       name: 'customerName',
       title: 'Customer Name',
       type: 'string',
-      validation: Rule => Rule.required(),
+      validation: (Rule: any) => Rule.required(),
     },
     {
       name: 'customerEmail',
       title: 'Customer Email',
       type: 'string',
-      validation: Rule => Rule.required().email(),
+      validation: (Rule: any) => Rule.required().email(),
+    },
+    {
+      name: 'phoneNumber',
+      title: 'Phone Number',
+      type: 'string',
+      validation: (Rule: any) =>
+        Rule.required().regex(/^\+?[0-9]{10,15}$/, {
+          message: 'Please enter a valid phone number.',
+        }),
+    },
+    {
+      name: 'address',
+      title: 'Address',
+      type: 'string',
+      validation: (Rule: any) => Rule.required(),
+    },
+    {
+      name: 'orderNumber',
+      title: 'Order Number',
+      type: 'string',
+      readOnly: true,
+    },
+    {
+      name: 'orderDate',
+      title: 'Order Date',
+      type: 'datetime',
+      readOnly: true,
     },
     {
       name: 'status',
@@ -25,6 +71,7 @@ export default {
       options: {
         list: [
           { title: 'Pending', value: 'pending' },
+          { title: 'Paid', value: 'paid' },
           { title: 'Processing', value: 'processing' },
           { title: 'Shipped', value: 'shipped' },
           { title: 'Delivered', value: 'delivered' },
@@ -46,31 +93,31 @@ export default {
               name: 'title',
               title: 'Product Title',
               type: 'string',
-              validation: Rule => Rule.required(),
+              validation: (Rule: any) => Rule.required(),
             },
             {
               name: 'image',
               title: 'Product Image',
               type: 'url',
-              validation: Rule => Rule.required(),
+              validation: (Rule: any) => Rule.required(),
             },
             {
               name: 'quantity',
               title: 'Quantity',
               type: 'number',
-              validation: Rule => Rule.required().min(1),
+              validation: (Rule: any) => Rule.required().min(1),
             },
             {
               name: 'totalPrice',
               title: 'Total Price',
               type: 'number',
-              validation: Rule => Rule.required().min(0),
+              validation: (Rule: any) => Rule.required().min(0),
             },
             {
               name: 'size',
               title: 'Product Size',
               type: 'string',
-              validation: Rule => Rule.required(),
+              validation: (Rule: any) => Rule.required(),
             },
           ],
         },
